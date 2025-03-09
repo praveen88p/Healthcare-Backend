@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -22,9 +23,11 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sj$waxw7jf)bl#jpynzemskn+%o=%4yam+%*tyqeuykms=yp#^'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = 'django-insecure-sj$waxw7jf)bl#jpynzemskn+%o=%4yam+%*tyqeuykms=yp#^'
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -39,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api'
+    'api',
+    'rest_framework',  
+    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
@@ -105,6 +110,25 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',  
+    ),
+}
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'SIGNING_KEY':  SECRET_KEY,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 
 # Internationalization
